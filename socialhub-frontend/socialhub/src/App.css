@@ -283,21 +283,76 @@ p {
 
 @media (max-width: 560px) {
   .site-nav {
-    padding-inline: 18px;
+    min-height: 0;
+    padding: 10px 16px 12px;
+    gap: 10px;
+  }
+
+  .brand {
+    gap: 7px;
+    font-size: 1rem;
+  }
+
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px 3px 9px 3px;
+    font-size: 1.05rem;
   }
 
   .nav-links {
     width: 100%;
-    justify-content: space-between;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+
+  .nav-link {
+    padding: 5px 0;
+    font-size: 0.8rem;
   }
 
   .nav-cta {
-    padding: 8px 13px !important;
-    font-size: 0.82rem;
+    margin-left: auto;
+    padding: 7px 10px !important;
+    font-size: 0.76rem;
+    white-space: nowrap;
+  }
+
+  .nav-cta span {
+    margin-left: 4px;
+    font-size: 1rem;
+  }
+
+  .posts-header {
+    align-items: stretch !important;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .posts-header h2 {
+    margin-bottom: 0;
+  }
+
+  .posts-header .btn {
+    align-self: flex-start;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-body > .btn {
+    padding: 7px 11px !important;
+    font-size: 0.8rem;
+  }
+
+  .form-control,
+  .form-select {
+    min-height: 44px;
   }
 
   .app-content {
     width: min(100% - 32px, 1080px);
-    padding-top: 48px;
+    padding-top: 32px;
   }
 }

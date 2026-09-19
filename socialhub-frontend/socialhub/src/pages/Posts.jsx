@@ -73,7 +73,7 @@ function Posts() {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="posts-header d-flex justify-content-between align-items-center mb-3">
         <h2>Publicaciones</h2>
         <Link to="/posts/new" className="btn btn-success">Nueva publicación</Link>
       </div>
