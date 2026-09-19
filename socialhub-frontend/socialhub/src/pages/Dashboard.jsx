@@ -25,15 +25,14 @@ function Dashboard() {
       <h2>Dashboard</h2>
       <p className="text-muted">Estadísticas generales de la plataforma</p>
 
-      <div className="row mb-4">
-        <div className="col-md-6">
+      <div className="row g-3 mb-4">
+        <div className="col-12 col-md-6">
           <div className="card text-center p-3">
             <h6>Total de publicaciones</h6>
             <h3>{data.totalPosts}</h3>
           </div>
         </div>
-        <br/>
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <div className="card text-center p-3">
             <h6>Total de comentarios</h6>
             <h3>{data.totalComments}</h3>

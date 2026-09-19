@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function PostCard({ post, onDelete }) {
+function PostCard({ post, onDelete, deleting }) {
   return (
     <div className="card mb-3">
       <div className="card-body">
@@ -12,8 +12,8 @@ function PostCard({ post, onDelete }) {
         <Link to={`/posts/${post.id}/edit`} className="btn btn-secondary btn-sm me-2">
           Editar
         </Link>
-        <button className="btn btn-danger btn-sm" onClick={() => onDelete(post.id)}>
-          Eliminar
+        <button className="btn btn-danger btn-sm" onClick={() => onDelete(post.id)} disabled={deleting}>
+          {deleting ? 'Eliminando...' : 'Eliminar'}
         </button>
       </div>
     </div>

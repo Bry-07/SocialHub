@@ -9,23 +9,21 @@ function EditPost() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
 
   const validate = (values) => {
     const nextErrors = {};
     if (!values.title.trim()) nextErrors.title = 'El título es obligatorio.';
     if (values.title.length > 150) nextErrors.title = 'El título no puede superar los 150 caracteres.';
     if (!values.content.trim()) nextErrors.content = 'El contenido es obligatorio.';
-    if (!values.author.trim()) nextErrors.author = 'El autor es obligatorio.';
     return nextErrors;
   };
 
   const updateField = (field, value) => {
-    const values = { title, content, author, [field]: value };
+    const values = { title, content, [field]: value };
     if (field === 'title') setTitle(value);
     if (field === 'content') setContent(value);
-    if (field === 'author') setAuthor(value);
     setErrors(validate(values));
   };
 
@@ -34,23 +32,24 @@ function EditPost() {
       .then((response) => {
         setTitle(response.data.title);
         setContent(response.data.content);
-        setAuthor(response.data.author || '');
       })
       .catch((err) => showError(getErrorMessage(err)));
   }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const nextErrors = validate({ title, content, author });
+    const nextErrors = validate({ title, content });
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    updatePost(id, { title, content, author })
+    setSaving(true);
+    updatePost(id, { title, content })
       .then(() => {
         showSuccess('Publicación actualizada.');
         navigate(`/posts/${id}`);
       })
-      .catch((err) => showError(getErrorMessage(err)));
+      .catch((err) => showError(getErrorMessage(err)))
+      .finally(() => setSaving(false));
   };
 
   return (
@@ -61,7 +60,6 @@ function EditPost() {
           <label className="form-label">Título</label>
           <input
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
-            maxLength={150}
             value={title}
             onChange={(e) => updateField('title', e.target.value)}
           />
@@ -76,16 +74,9 @@ function EditPost() {
           />
           {errors.content && <div className="invalid-feedback">{errors.content}</div>}
         </div>
-        <div className="mb-3">
-          <label className="form-label">Autor</label>
-          <input
-            className={`form-control ${errors.author ? 'is-invalid' : ''}`}
-            value={author}
-            onChange={(e) => updateField('author', e.target.value)}
-          />
-          {errors.author && <div className="invalid-feedback">{errors.author}</div>}
-        </div>
-        <button className="btn btn-secondary" type="submit">Actualizar</button>
+        <button className="btn btn-secondary" type="submit" disabled={saving}>
+          {saving ? 'Actualizando...' : 'Actualizar'}
+        </button>
       </form>
     </div>
   );

@@ -22,5 +22,4 @@ public class PostRequest {
     @Schema(description = "Contenido de la publicación", example = "Este es el contenido...")
     @NotBlank(message = "El contenido es obligatorio")
     private String content;
-    // getters/setters/builder igual que antes
 }

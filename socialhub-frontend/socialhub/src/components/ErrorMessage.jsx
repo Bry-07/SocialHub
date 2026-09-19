@@ -1,7 +1,7 @@
 function ErrorMessage({ text }) {
   return (
     <div className="alert alert-danger" role="alert">
-      {text || 'Ocurrió un error inesperado.'}
+      {text || 'La respuesta recibida no tiene el formato esperado.'}
     </div>
   );
 }

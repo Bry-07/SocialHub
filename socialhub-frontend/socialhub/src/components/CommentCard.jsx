@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function CommentCard({ comment, onUpdate, onDelete }) {
+function CommentCard({ comment, onUpdate, onDelete, updating, deleting }) {
   const [editing, setEditing] = useState(false);
   const [author, setAuthor] = useState(comment.author);
   const [text, setText] = useState(comment.comment);
@@ -46,8 +46,8 @@ function CommentCard({ comment, onUpdate, onDelete }) {
         />
         {errors.comment && <div className="invalid-feedback d-block mb-1">{errors.comment}</div>}
         <div>
-          <button className="btn btn-primary btn-sm me-2" onClick={handleSave}>
-            Guardar
+          <button className="btn btn-primary btn-sm me-2" onClick={handleSave} disabled={updating}>
+            {updating ? 'Actualizando...' : 'Guardar'}
           </button>
           <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditing(false)}>
             Cancelar
@@ -64,8 +64,8 @@ function CommentCard({ comment, onUpdate, onDelete }) {
         <button className="btn btn-secondary btn-sm me-2" onClick={() => setEditing(true)}>
           Editar
         </button>
-        <button className="btn btn-danger btn-sm" onClick={() => onDelete(comment.id)}>
-          Eliminar
+        <button className="btn btn-danger btn-sm" onClick={() => onDelete(comment.id)} disabled={deleting}>
+          {deleting ? 'Eliminando...' : 'Eliminar'}
         </button>
       </div>
     </div>
