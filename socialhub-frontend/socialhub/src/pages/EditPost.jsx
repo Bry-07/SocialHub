@@ -77,6 +77,9 @@ function EditPost() {
         <button className="btn btn-secondary" type="submit" disabled={saving}>
           {saving ? 'Actualizando...' : 'Actualizar'}
         </button>
+        <button className="btn btn-outline-secondary ms-2" type="button" onClick={() => navigate('/posts')}>
+          Cancelar
+        </button>
       </form>
     </div>
   );

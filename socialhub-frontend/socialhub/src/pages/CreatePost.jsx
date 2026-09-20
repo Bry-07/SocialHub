@@ -67,6 +67,9 @@ function CreatePost() {
         <button className="btn btn-success" type="submit" disabled={saving}>
           {saving ? 'Guardando...' : 'Guardar'}
         </button>
+        <button className="btn btn-outline-secondary ms-2" type="button" onClick={() => navigate('/posts')}>
+          Cancelar
+        </button>
       </form>
     </div>
   );

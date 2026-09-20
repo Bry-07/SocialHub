@@ -20,47 +20,73 @@ function Dashboard() {
   if (loading) return <Loading text="Cargando estadísticas..." />;
   if (loadError) return <ErrorMessage text={loadError} />;
 
+  const formatDate = (value) => value
+    ? new Intl.DateTimeFormat('es-ES', { dateStyle: 'medium' }).format(new Date(value))
+    : 'Fecha no disponible';
+
   return (
     <div>
       <h2>Dashboard</h2>
       <p className="text-muted">Estadísticas generales de la plataforma</p>
 
-      <div className="row g-3 mb-4">
+      <div className="row g-3 mb-4 dashboard-stats">
         <div className="col-12 col-md-6">
-          <div className="card text-center p-3">
-            <h6>Total de publicaciones</h6>
+          <div className="card dashboard-stat-card p-3">
+            <span className="dashboard-stat-label">Total de publicaciones</span>
             <h3>{data.totalPosts}</h3>
+            <span className="dashboard-stat-detail">Contenido compartido</span>
           </div>
         </div>
         <div className="col-12 col-md-6">
-          <div className="card text-center p-3">
-            <h6>Total de comentarios</h6>
+          <div className="card dashboard-stat-card p-3">
+            <span className="dashboard-stat-label">Total de comentarios</span>
             <h3>{data.totalComments}</h3>
+            <span className="dashboard-stat-detail">Conversaciones activas</span>
           </div>
         </div>
       </div>
       
       {data.mostCommentedPost && (
-        <div className="mb-4">
-          <h5>Publicación con más comentarios</h5>
-          <div className="card p-3">
-            <strong>{data.mostCommentedPost.title}</strong>
-            <span className="text-muted">
-              {data.mostCommentedPost.commentsCount} comentarios
-            </span>
+        <div className="mb-4 dashboard-featured-section">
+          <div className="section-heading">
+            <span className="section-kicker">Lo más conversado</span>
+            <h5>Publicación con más comentarios</h5>
+          </div>
+          <div className="card dashboard-featured-card p-3">
+            <div className="dashboard-featured-icon" aria-hidden="true">#</div>
+            <div className="dashboard-featured-content">
+              <strong>{data.mostCommentedPost.title}</strong>
+              <div className="dashboard-meta">
+                <span>{formatDate(data.mostCommentedPost.createdAt)}</span>
+                <span className="dashboard-comment-count">
+                  {data.mostCommentedPost.commentsCount} comentarios
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      <h5>Últimas publicaciones</h5>
+      <div className="section-heading latest-heading">
+        <span className="section-kicker">Actividad reciente</span>
+        <h5>Últimas 5 publicaciones</h5>
+      </div>
       {data.latestPosts?.length === 0 && <p>No hay publicaciones recientes.</p>}
-      {data.latestPosts?.map((post) => (
-        <div key={post.id} className="card mb-2 p-2">
-          <Link to={`/posts/${post.id}`} className="text-decoration-none">
-            {post.title}
-          </Link>
-        </div>
-      ))}
+      <div className="dashboard-latest-grid">
+        {data.latestPosts?.map((post) => (
+          <div key={post.id} className="card dashboard-latest-card p-3">
+            <div>
+              <Link to={`/posts/${post.id}`} className="text-decoration-none dashboard-latest-title">
+                {post.title}
+              </Link>
+              <div className="dashboard-meta">
+                <span>{formatDate(post.createdAt)}</span>
+                {post.commentsCount !== undefined && <span>{post.commentsCount} comentarios</span>}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

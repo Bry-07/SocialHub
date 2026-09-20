@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getPostById } from '../api/postService';
 import {
   getCommentsByPost,
@@ -15,6 +15,7 @@ import { getErrorMessage } from '../utils/errorHandler';
 
 function PostDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -115,14 +116,26 @@ function PostDetail() {
   if (loadError) return <ErrorMessage text={loadError} />;
 
   return (
-    <div>
-      <h2>{post.title} ({post.comments?.length || 0} comentarios)</h2>
-      <p>{post.content}</p>
-      <Link to={`/posts/${id}/edit`} className="btn btn-secondary btn-sm mb-4">
-        Editar
-      </Link>
+    <div className="post-detail-page">
+      <section className="post-detail-header">
+        <div>
+          <span className="section-kicker">Publicación</span>
+          <h2>{post.title}</h2>
+          <p>{post.content}</p>
+        </div>
+        <Link to={`/posts/${id}/edit`} className="btn btn-secondary btn-sm">
+          Editar
+        </Link>
+      </section>
 
-      <h4>Comentarios</h4>
+      <section className="comments-section">
+        <div className="comments-heading">
+          <div>
+            <span className="section-kicker">Conversación</span>
+            <h4>Comentarios</h4>
+          </div>
+          <span className="comments-total">{post.comments?.length || 0}</span>
+        </div>
       {commentsLoading ? <Loading text="Cargando comentarios..." /> : (
         <>
           {comments.length === 0 && <p>No hay comentarios todavía.</p>}
@@ -138,9 +151,11 @@ function PostDetail() {
           ))}
         </>
       )}
+      </section>
 
-      <h5 className="mt-4">Agregar comentario</h5>
-      <form onSubmit={handleCreateComment}>
+      <section className="comment-form-section">
+        <h5>Agregar comentario</h5>
+      <form onSubmit={handleCreateComment} className="comment-form">
         <div className="mb-2">
           <input
             className={`form-control ${commentErrors.author ? 'is-invalid' : ''}`}
@@ -162,7 +177,11 @@ function PostDetail() {
         <button className="btn btn-success btn-sm" type="submit" disabled={savingComment}>
           {savingComment ? 'Guardando comentario...' : 'Comentar'}
         </button>
+        <button className="btn btn-outline-secondary btn-sm ms-2" type="button" onClick={() => navigate('/posts')}>
+          Cancelar
+        </button>
       </form>
+      </section>
     </div>
   );
 }

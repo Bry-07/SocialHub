@@ -105,9 +105,11 @@ function Posts() {
       </div>
 
       {filteredPosts.length === 0 && <p>No se encontraron publicaciones.</p>}
-      {filteredPosts.map((post) => (
-        <PostCard key={post.id} post={post} onDelete={handleDelete} deleting={deletingId === post.id} />
-      ))}
+      <div className="posts-grid">
+        {filteredPosts.map((post) => (
+          <PostCard key={post.id} post={post} onDelete={handleDelete} deleting={deletingId === post.id} />
+        ))}
+      </div>
     </div>
   );
 }

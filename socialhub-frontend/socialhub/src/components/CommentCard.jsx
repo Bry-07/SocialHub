@@ -5,6 +5,9 @@ function CommentCard({ comment, onUpdate, onDelete, updating, deleting }) {
   const [author, setAuthor] = useState(comment.author);
   const [text, setText] = useState(comment.comment);
   const [errors, setErrors] = useState({});
+  const formattedDate = comment.createdAt
+    ? new Intl.DateTimeFormat('es-ES', { dateStyle: 'medium' }).format(new Date(comment.createdAt))
+    : 'Fecha no disponible';
 
   const validate = (values) => {
     const nextErrors = {};
@@ -24,7 +27,7 @@ function CommentCard({ comment, onUpdate, onDelete, updating, deleting }) {
 
   if (editing) {
     return (
-      <div className="card mb-2 p-2">
+      <div className="card comment-card comment-card-editing mb-3 p-3">
         <input
           className={`form-control mb-1 ${errors.author ? 'is-invalid' : ''}`}
           value={author}
@@ -58,9 +61,13 @@ function CommentCard({ comment, onUpdate, onDelete, updating, deleting }) {
   }
 
   return (
-    <div className="card mb-2 p-2">
-      <p className="mb-1"><strong>{comment.author}</strong>: {comment.comment}</p>
-      <div>
+    <div className="card comment-card mb-3 p-3">
+      <div className="comment-card-header">
+        <strong>{comment.author}</strong>
+        <span className="comment-card-date">{formattedDate}</span>
+      </div>
+      <p className="comment-card-text">{comment.comment}</p>
+      <div className="comment-card-actions">
         <button className="btn btn-secondary btn-sm me-2" onClick={() => setEditing(true)}>
           Editar
         </button>
