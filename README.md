@@ -10,6 +10,7 @@ SocialHub/
 ├── docs/
 │       SocialHub-AB250136.docx
 │       estructura-proyecto.txt
+│       ERROR 500.txt
 │
 ├── socialhub-backend/
 │   └── socialhub/          → proyecto Maven (Spring Boot)
@@ -368,7 +369,7 @@ Con el backend en ejecución:
 La carpeta [`docs/`](./docs) contiene la documentación disponible actualmente:
 
 - [`estructura-proyecto.txt`](./docs/estructura-proyecto.txt): árbol del proyecto con las carpetas y archivos relevantes.
-- `SocialHub-AB250136.docx`: documento académico del proyecto.
+- [`SocialHub-AB250136.docx`](./docs/SocialHub-AB250136.docx): documento académico del proyecto.
 
 ---
 
