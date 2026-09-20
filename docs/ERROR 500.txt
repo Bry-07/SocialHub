@@ -1,0 +1,8 @@
+ERROR 500
+
+(Internal server error)
+
+@GetMapping("/test500")
+public String test500() {
+    throw new RuntimeException("Prueba 500");
+}

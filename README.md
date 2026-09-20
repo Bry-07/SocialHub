@@ -2,15 +2,14 @@
 
 Aplicación full-stack de publicaciones y comentarios desarrollada como proyecto académico para la materia **Desarrollo de Aplicaciones con Web Frameworks**.
 
-SocialHub está compuesta por un backend en **Spring Boot** que expone una API REST, y un frontend en **React + Vite** que la consume. El backend administra la persistencia y las reglas de negocio; el frontend se encarga exclusivamente de la interfaz y la interacción del usuario.
+SocialHub está compuesta por un backend en **Spring Boot** que expone una API REST, y un frontend en **React + Vite** que la consume. El backend administra la persistencia, las reglas de negocio y los datos iniciales de demostración; el frontend se encarga de la interfaz y la interacción del usuario.
 
 ```
 SocialHub/
 ├── capturas/
 ├── docs/
-│       SocialHub_Explicada.docx
-│       SocialHub_Frontend_Explicada.docx
-│       SocialHub_Guia_Explicada.docx
+│       SocialHub-AB250136.docx
+│       estructura-proyecto.txt
 │
 ├── socialhub-backend/
 │   └── socialhub/          → proyecto Maven (Spring Boot)
@@ -28,11 +27,14 @@ SocialHub/
 - [Tecnologías](#tecnologías)
 - [Estructura del proyecto](#estructura-del-proyecto)
 - [Modelo de dominio](#modelo-de-dominio)
+- [Datos de demostración](#datos-de-demostración)
 - [Endpoints de la API](#endpoints-de-la-api)
 - [Manejo de errores](#manejo-de-errores)
+- [Funcionalidades del frontend](#funcionalidades-del-frontend)
 - [Instalación y ejecución](#instalación-y-ejecución)
+- [Validación](#validación)
 - [Documentación de la API (Swagger)](#documentación-de-la-api-swagger)
-- [Capturas de pantalla](#capturas-de-pantalla)
+- [Documentación adicional](#documentación-adicional)
 - [Autor](#autor)
 
 ---
@@ -43,6 +45,8 @@ SocialHub permite gestionar publicaciones (**posts**) y sus comentarios (**post 
 
 - **Backend**: API REST que expone los datos en formato JSON, sin interfaz gráfica propia.
 - **Frontend**: SPA (Single Page Application) que consume la API y renderiza la interfaz en el navegador, sin lógica de negocio propia.
+- **Persistencia local**: H2 en memoria, recreada en cada arranque mediante `ddl-auto=create-drop`.
+- **Datos iniciales**: `DataSeeder` carga publicaciones y comentarios cuando `postRepository.count()` es igual a cero.
 
 ---
 
@@ -64,7 +68,7 @@ SocialHub permite gestionar publicaciones (**posts**) y sus comentarios (**post 
 | --- | --- |
 | `api/` | Funciones que se comunican con el backend usando Axios (`postService`, `commentService`, `dashboardService`) y configuración base (`axiosConfig.js`). |
 | `components/` | Piezas de interfaz reutilizables sin lógica de datos: `Navbar`, `PostCard`, `CommentCard`, `SearchBar`, `Loading`, `ErrorMessage`. |
-| `pages/` | Vistas completas asociadas a una ruta: `Dashboard`, `Posts`, `CreatePost`, `EditPost`, `PostDetail`. |
+| `pages/` | Vistas completas asociadas a una ruta: `Dashboard`, `Posts`, `CreatePost`, `EditPost`, `PostDetail`. Incluyen layouts responsive y cancelación de formularios. |
 | `routes/` | Define qué page corresponde a cada URL (`AppRoutes.jsx`). |
 | `utils/` | Funciones auxiliares: `constants.js`, `alerts.js` (SweetAlert2), `errorHandler.js`. |
 
@@ -77,7 +81,7 @@ El flujo de una petición siempre sigue el mismo patrón: **page → api/ (Axios
 ### Backend
 
 - Java 17
-- Spring Boot
+- Spring Boot 4.1.1
 - Spring Data JPA / Hibernate
 - H2 Database (en memoria)
 - Lombok
@@ -88,12 +92,12 @@ El flujo de una petición siempre sigue el mismo patrón: **page → api/ (Axios
 
 ### Frontend
 
-- React
-- Vite
-- Bootstrap 5
-- Axios
-- React Router DOM
-- SweetAlert2
+- React 19.2.8
+- Vite 8.3.0
+- Bootstrap 5.3.8
+- Axios 1.20.0
+- React Router DOM 7.18.4
+- SweetAlert2 11.26.25
 
 ---
 
@@ -107,6 +111,7 @@ socialhub/
 │
 ├── configuration/
 │   │   CorsConfig.java
+│   │   DataSeeder.java
 │   │   GlobalExceptionHandler.java
 │   │   OpenApiConfig.java
 │   │
@@ -208,7 +213,28 @@ src/
 - `Post`: `id`, `title`, `content`, `createdAt`, lista de comentarios asociados.
 - `PostComment`: `id`, `comment`, `author`, `createdAt`, referencia al `Post` al que pertenece (lado dueño de la relación).
 
-La relación se configura con `cascade = ALL`, `orphanRemoval = true` y `fetch = LAZY` en el lado `@OneToMany` de `Post`.
+La relación se configura con `cascade = ALL` y `orphanRemoval = true` en el lado `@OneToMany` de `Post`, mientras que `PostComment.post` es el lado propietario mediante `@ManyToOne(fetch = LAZY)`.
+
+---
+
+## Datos de demostración
+
+`configuration/DataSeeder.java` implementa `ApplicationRunner` y se ejecuta al iniciar Spring Boot.
+
+- Si `postRepository.count()` es mayor que cero, no inserta registros.
+- Si la base está vacía, crea seis publicaciones y sus comentarios.
+- Los comentarios se guardan asociados a su publicación mediante `PostComment.post`.
+- Los registros pueden editarse y eliminarse desde la aplicación.
+- H2 se recrea en cada arranque porque `spring.jpa.hibernate.ddl-auto=create-drop`; por eso los datos de demostración vuelven a aparecer después de reiniciar.
+
+| Publicación | Comentarios iniciales |
+| --- | ---: |
+| Backend con ExpressJS | 0 |
+| Fundamentos de Node.js | 1 |
+| TypeScript: Tipos Avanzados y Funciones | 2 |
+| TypeScript | 3 |
+| Fundamentos de JavaScript | 4 |
+| Git y GitHub | 5 |
 
 ---
 
@@ -244,15 +270,49 @@ El frontend centraliza la lectura de ese error en `getErrorMessage(error)` (`uti
 
 ---
 
+## Funcionalidades del frontend
+
+### Dashboard
+
+- Muestra el total de publicaciones y comentarios.
+- Destaca la publicación más comentada con título, fecha y cantidad de comentarios.
+- Presenta las publicaciones recientes como cards pequeñas.
+
+### Publicaciones
+
+- Busca por título o contenido.
+- Filtra por publicaciones con comentarios, sin comentarios, recientes y más comentadas.
+- Presenta las publicaciones como cards verticales responsive.
+- Cada card muestra título, fecha, cantidad de comentarios, resumen y acciones.
+
+### Detalle y comentarios
+
+- Muestra la publicación seleccionada y su contenido.
+- Presenta cada comentario como una card con autor, fecha, contenido y acciones.
+- Permite crear, editar y eliminar comentarios.
+- Los formularios de crear y editar incluyen un botón secundario `Cancelar` que redirige a `/posts`.
+
+La grilla utiliza cuatro columnas en pantallas amplias, dos en tablet y una en mobile.
+
+---
+
 ## Instalación y ejecución
 
 ### Requisitos previos
 
 - Java 17+
-- Maven 3.8+
 - Node.js 18+ y npm
 
-### Backend
+Maven no necesita estar instalado globalmente porque el backend incluye Maven Wrapper.
+
+### Backend en Windows
+
+```powershell
+Set-Location "socialhub-backend\socialhub"
+.\mvnw.cmd spring-boot:run
+```
+
+### Backend en Linux o macOS
 
 ```bash
 cd socialhub-backend/socialhub
@@ -275,6 +335,25 @@ El frontend levanta en `http://localhost:5173` mediante Vite.
 
 ---
 
+## Validación
+
+### Backend
+
+```powershell
+cd socialhub-backend\socialhub
+.\mvnw.cmd test
+```
+
+### Frontend
+
+```bash
+cd socialhub-frontend/socialhub
+npm run lint
+npm run build
+```
+
+---
+
 ## Documentación de la API (Swagger)
 
 Con el backend en ejecución:
@@ -286,11 +365,10 @@ Con el backend en ejecución:
 
 ## Documentación adicional
 
-La carpeta [`docs/`](./docs) contiene guías explicativas del proyecto pensadas para la defensa:
+La carpeta [`docs/`](./docs) contiene la documentación disponible actualmente:
 
-- `SocialHub_Explicada.docx` — backend (arquitectura, capas, endpoints, preguntas típicas).
-- `SocialHub_Frontend_Explicada.docx` — frontend (arquitectura, componentes, routing, preguntas típicas).
-- `SocialHub_Guia_Explicada.docx` — guía general del proyecto.
+- [`estructura-proyecto.txt`](./docs/estructura-proyecto.txt): árbol del proyecto con las carpetas y archivos relevantes.
+- `SocialHub-AB250136.docx`: documento académico del proyecto.
 
 ---
 

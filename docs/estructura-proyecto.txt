@@ -1,0 +1,115 @@
+SocialHub
+|-- .gitattributes
+|-- README.md
+|-- docs
+|   |-- SocialHub-AB250136.docx
+|   \-- estructura-proyecto.txt
+|-- socialhub-backend
+|   \-- socialhub
+|       |-- .gitattributes
+|       |-- .gitignore
+|       |-- HELP.md
+|       |-- mvnw
+|       |-- mvnw.cmd
+|       |-- pom.xml
+|       \-- src
+|           |-- main
+|           |   |-- java
+|           |   |   \-- sv
+|           |   |       \-- edu
+|           |   |           \-- udb
+|           |   |               \-- socialhub
+|           |   |                   |-- SocialhubApplication.java
+|           |   |                   |-- configuration
+|           |   |                   |   |-- CorsConfig.java
+|           |   |                   |   |-- DataSeeder.java
+|           |   |                   |   |-- GlobalExceptionHandler.java
+|           |   |                   |   |-- OpenApiConfig.java
+|           |   |                   |   \-- web
+|           |   |                   |       |-- ApiError.java
+|           |   |                   |       \-- ApiErrorWrapper.java
+|           |   |                   |-- controller
+|           |   |                   |   |-- PostCommentController.java
+|           |   |                   |   |-- PostController.java
+|           |   |                   |   |-- DashboardController.java
+|           |   |                   |   |-- request
+|           |   |                   |   |   |-- PostCommentRequest.java
+|           |   |                   |   |   \-- PostRequest.java
+|           |   |                   |   \-- response
+|           |   |                       |-- DashboardResponse.java
+|           |   |                       |-- PostCommentResponse.java
+|           |   |                       |-- PostResponse.java
+|           |   |                       \-- PostSummaryResponse.java
+|           |   |                   |-- mapper
+|           |   |                   |   |-- PostCommentMapper.java
+|           |   |                   |   \-- PostMapper.java
+|           |   |                   |-- repository
+|           |   |                   |   |-- PostCommentRepository.java
+|           |   |                   |   |-- PostRepository.java
+|           |   |                   |   \-- domain
+|           |   |                       |-- Post.java
+|           |   |                       \-- PostComment.java
+|           |   |                   \-- service
+|           |   |                       |-- DashboardService.java
+|           |   |                       |-- PostCommentService.java
+|           |   |                       |-- PostService.java
+|           |   |                       |-- ResourceNotFoundException.java
+|           |   |                       \-- implementation
+|           |   |                           |-- DashboardServiceImpl.java
+|           |   |                           |-- PostCommentServiceImpl.java
+|           |   |                           \-- PostServiceImpl.java
+|           |   \-- resources
+|           |       |-- application.properties
+|           |       |-- static
+|           |       \-- templates
+|           \-- test
+|               \-- java
+|                   \-- sv
+|                       \-- edu
+|                           \-- udb
+|                               \-- socialhub
+|                                   \-- SocialhubApplicationTests.java
+\-- socialhub-frontend
+    \-- socialhub
+        |-- .gitignore
+        |-- eslint.config.js
+        |-- index.html
+        |-- package.json
+        |-- package-lock.json
+        |-- vite.config.js
+        |-- public
+        |   |-- favicon.svg
+        |   \-- icons.svg
+        \-- src
+            |-- App.css
+            |-- App.jsx
+            |-- index.css
+            |-- main.jsx
+            |-- api
+            |   |-- axiosConfig.js
+            |   |-- commentService.js
+            |   |-- dashboardService.js
+            |   \-- postService.js
+            |-- assets
+            |   |-- hero.png
+            |   |-- react.svg
+            |   \-- vite.svg
+            |-- components
+            |   |-- CommentCard.jsx
+            |   |-- ErrorMessage.jsx
+            |   |-- Loading.jsx
+            |   |-- Navbar.jsx
+            |   |-- PostCard.jsx
+            |   \-- SearchBar.jsx
+            |-- pages
+            |   |-- CreatePost.jsx
+            |   |-- Dashboard.jsx
+            |   |-- EditPost.jsx
+            |   |-- PostDetail.jsx
+            |   \-- Posts.jsx
+            |-- routes
+            |   \-- AppRoutes.jsx
+            \-- utils
+                |-- alerts.js
+                |-- constants.js
+                \-- errorHandler.js
